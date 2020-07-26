@@ -10,13 +10,13 @@ const port = process.env.PORT || 3000;
 
 app.post("/users", (req, res) => {
     var user = new User(req.body);
-    user.save().then(result => res.send(result))
+    user.save().then(result => res.status(201).send(result))
         .catch(error => res.status("400").send(error));
 })
 
 app.post("/tasks", (req, res) => {
     var task = new Task(req.body);
-    task.save().then(result => res.send(result))
+    task.save().then(result => res.status(201).send(result))
         .catch(error => res.status("400").send(error));
 })
 
