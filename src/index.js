@@ -1,4 +1,5 @@
 const express = require("express");
+require("./db/mongoose/mongoose");
 const User = require("./models/user");
 const Task = require("./models/task");
 
