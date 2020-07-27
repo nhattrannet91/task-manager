@@ -30,6 +30,16 @@ app.post("/tasks", (req, res) => {
         .catch(error => res.status("400").send(error));
 })
 
+app.get("/tasks", (req, res) => {
+    Task.find({}).then(tasks => res.send(tasks))
+        .catch(error => res.status(500).send());
+})
+
+app.get("/tasks/:id", (req, res) => {
+    Task.findById(req.params.id).then(task => res.send(task))
+        .catch(error => res.status(500).send());
+})
+
 app.listen(port, () => {
     console.log("The service is up port 3000");
 })
