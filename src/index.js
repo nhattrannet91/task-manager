@@ -20,8 +20,13 @@ app.get("/users", (req, res) => {
 })
 
 app.get("/users/:id", (req, res) => {
-    User.findById(req.params.id).then(user => res.send(user))
-        .catch(error => res.status(500).send());
+    User.findById(req.params.id).then(user => {
+        if (!user) {
+            return res.status(404).send();
+        }
+        res.send(user);
+    })
+    .catch(error => res.status(500).send(error));
 })
 
 app.post("/tasks", (req, res) => {
@@ -36,8 +41,15 @@ app.get("/tasks", (req, res) => {
 })
 
 app.get("/tasks/:id", (req, res) => {
-    Task.findById(req.params.id).then(task => res.send(task))
-        .catch(error => res.status(500).send());
+    Task.findById(req.params.id).then(task => {
+        if (!task) {
+            console.log("Task not found");
+            return res.status(404).send();
+        }
+
+        res.send(task);
+    })
+    .catch(error => res.status(500).send(error));
 })
 
 app.listen(port, () => {
