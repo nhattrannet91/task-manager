@@ -43,13 +43,16 @@ router.patch("/users/:id", async (req, res) => {
     }
 
     try {
-        const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-        if(!user){
-            return res.status(400).send("User not found");
+        var user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).send("User not found");
         }
+
+        updates.forEach(update => user[update] = req.body[update]);
+        await user.save();
         res.send(user);
     } catch (error) {
-        res.status(400).send();
+        res.status(400).send({error});
     }
 })
 
@@ -57,7 +60,7 @@ router.delete("/users/:id", async (req, res) => {
     try {
         const user = await User.findByIdAndDelete(req.params.id);
         if (!user) {
-            return res.status(404).send({error: "User not found"});
+            return res.status(404).send({ error: "User not found" });
         }
 
         res.send(user);
