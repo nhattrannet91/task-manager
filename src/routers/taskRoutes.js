@@ -44,13 +44,17 @@ router.patch("/tasks/:id", async (req, res) => {
     }
 
     try {
-        const task = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-        if(!task){
+        // const task = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+        const task = await Task.findById(req.params.id);
+        if (!task) {
             return res.status(400).send("Task not found");
         }
+
+        updates.forEach(update => task[update] = req.body[update]);
+        await task.save();
         res.send(task);
     } catch (error) {
-        res.status(400).send();
+        res.status(400).send({error});
     }
 })
 
@@ -58,7 +62,7 @@ router.delete("/tasks/:id", async (req, res) => {
     try {
         const task = await Task.findByIdAndDelete(req.params.id);
         if (!task) {
-            return res.status(404).send({error: "Task not found"});
+            return res.status(404).send({ error: "Task not found" });
         }
 
         res.send(task);
