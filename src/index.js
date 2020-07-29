@@ -50,6 +50,9 @@ app.patch("/users/:id", async (req, res) => {
 
     try {
         const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+        if(!user){
+            return res.status(400).send("User not found");
+        }
         res.send(user);
     } catch (error) {
         res.status(400).send();
@@ -99,6 +102,9 @@ app.patch("/tasks/:id", async (req, res) => {
 
     try {
         const task = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+        if(!task){
+            return res.status(400).send("Task not found");
+        }
         res.send(task);
     } catch (error) {
         res.status(400).send();
