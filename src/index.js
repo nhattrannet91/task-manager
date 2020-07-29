@@ -40,6 +40,22 @@ app.get("/users/:id", async (req, res) => {
     }
 })
 
+app.patch("/users/:id", async (req, res) => {
+    const updates = Object.keys(req.body);
+    const allowUpdates = ["name", "email", "password"];
+    const isValidUpdates = updates.every(update => allowUpdates.includes(update));
+    if (!isValidUpdates) {
+        return res.status(400).send();
+    }
+
+    try {
+        const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+        res.send(user);
+    } catch (error) {
+        res.status(400).send();
+    }
+})
+
 app.post("/tasks", async (req, res) => {
     var task = new Task(req.body);
     try {
