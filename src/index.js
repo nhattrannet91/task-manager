@@ -89,6 +89,22 @@ app.get("/tasks/:id", async (req, res) => {
     }
 })
 
+app.patch("/tasks/:id", async (req, res) => {
+    const updates = Object.keys(req.body);
+    const allowUpdates = ["completed"];
+    const isValidUpdates = updates.every(update => allowUpdates.includes(update));
+    if (!isValidUpdates) {
+        return res.status(400).send();
+    }
+
+    try {
+        const task = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+        res.send(task);
+    } catch (error) {
+        res.status(400).send();
+    }
+})
+
 app.listen(port, () => {
     console.log("The service is up port 3000");
 })
