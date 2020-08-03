@@ -30,7 +30,13 @@ const userSchema = new mongoose.Schema({
                 throw new Error(`The password contains \"password\"`)
             }
         }
-    }
+    },
+    tokens: [{
+        token: {
+            type: String,
+            required: true
+        }
+    }]
 })
 
 userSchema.pre("save", async function (next) {
@@ -43,7 +49,10 @@ userSchema.pre("save", async function (next) {
 
 userSchema.methods.generateToken = async function () {
     const user = this;
-    return await jwt.sign({ _id : user._id.toString()}, "thisisanexercise");
+    const token = await jwt.sign({ _id : user._id.toString()}, "thisisanexercise");
+    user.tokens.push({ token });
+    await user.save();
+    return token;
 }
 
 userSchema.statics.findByCredentials = async function (email, password) {
