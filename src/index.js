@@ -4,6 +4,11 @@ const userRoutes = require("./routers/userRoutes");
 const taskRoutes = require("./routers/taskRoutes");
 
 const app = express();
+
+app.use((req, res, next) => {
+    res.status(503).send("The website is under construction");
+})
+
 app.use(express.json());
 app.use(userRoutes);
 app.use(taskRoutes);
