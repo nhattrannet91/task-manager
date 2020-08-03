@@ -76,7 +76,8 @@ router.post("/users/login", async (req, res) => {
             return res.status(404).send({ error: "User not found" });
         }
 
-        res.send(user);
+        const token = await user.generateToken()
+        res.send({user, token});
     } catch (error) {
         res.status(500).send(error);
     }
