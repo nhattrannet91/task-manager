@@ -39,6 +39,20 @@ userSchema.pre("save", async function (next) {
      }
     return next();
 })
+
+userSchema.statics.findByCredentials = async function (email, password) {
+    const user = await this.findOne({email});
+    if(!user){
+        throw new Error("User not found");
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if(!isMatch){
+        throw new Error("User not found");
+    }
+
+    return user;
+}
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;

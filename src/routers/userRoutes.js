@@ -69,4 +69,17 @@ router.delete("/users/:id", async (req, res) => {
     }
 })
 
+router.post("/users/login", async (req, res) => {
+    try {
+        const user = await User.findByCredentials(req.body.email, req.body.password);
+        if (!user) {
+            return res.status(404).send({ error: "User not found" });
+        }
+
+        res.send(user);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+})
+
 module.exports = router;
