@@ -48,6 +48,14 @@ userSchema.pre("save", async function (next) {
     return next();
 })
 
+userSchema.methods.toJSON = function () {
+    const user = this;
+    const userObject = user.toObject();
+    delete userObject.tokens
+    delete userObject.password
+    return userObject;
+}
+
 userSchema.methods.generateToken = async function () {
     const user = this;
     const token = await jwt.sign({ _id : user._id.toString()}, "thisisanexercise");
