@@ -10,6 +10,7 @@ const auth = async function (req, res, next) {
          throw new Error("Failed to authenticate");
       }
 
+      req.token = token;
       req.user = user;
       next();
    } catch (error) {
