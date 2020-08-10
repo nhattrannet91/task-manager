@@ -1,6 +1,5 @@
-
 const mongoose = require("mongoose");
-const Task = mongoose.model("Task", {
+const mongooseSchema = new mongoose.Schema({
     completed: {
         type: Boolean,
         default: false
@@ -15,6 +14,10 @@ const Task = mongoose.model("Task", {
         ref: "User",
         required: true
     }
-});
+}, {
+    timestamps: true
+})
+
+const Task = mongoose.model("Task", mongooseSchema);
 
 module.exports = Task;
