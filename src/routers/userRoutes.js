@@ -1,6 +1,8 @@
 const express = require("express")
 const User = require("../db/models/user");
 const auth = require("../middleware/auth");
+const multer = require("multer");
+const upload = multer({dest: "avatars"});
 const router = new express.Router()
 
 router.post("/users", async (req, res) => {
@@ -17,6 +19,7 @@ router.post("/users", async (req, res) => {
 router.get("/users/me", auth, async (req, res) => {
     res.send(req.user);
 })
+
 
 router.patch("/users/me", auth, async (req, res) => {
     const updates = Object.keys(req.body);
@@ -56,6 +59,10 @@ router.post("/users/login", async (req, res) => {
     } catch (error) {
         res.status(500).send(error);
     }
+})
+
+router.post("/users/me/avatar", upload.single("avatar"), async (req, res) => {
+    res.send();
 })
 
 router.post("/users/logout", auth, async (req, res) => {
