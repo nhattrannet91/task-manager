@@ -76,7 +76,7 @@ userSchema.methods.toJSON = function () {
 
 userSchema.methods.generateToken = async function () {
     const user = this;
-    const token = await jwt.sign({ _id : user._id.toString()}, "thisisanexercise");
+    const token = await jwt.sign({ _id : user._id.toString()}, process.env.JWT_SECRET);
     user.tokens.push({ token });
     await user.save();
     return token;
