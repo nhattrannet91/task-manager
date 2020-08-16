@@ -9,8 +9,7 @@ app.use(express.json());
 app.use(userRoutes);
 app.use(taskRoutes);
 
-const port = process.env.PORT || 3000;
-
+const port = process.env.PORT;
 
 app.listen(port, () => {
     console.log("The service is up port 3000");
